@@ -4,31 +4,42 @@
   "description": "Application description.",
   "license": "MIT",
   "scripts": {
-    "start": "meteor --settings settings-development.json",
-    "test": "meteor test --driver-package practicalmeteor:mocha --port 5000",
+    "start": "meteor --settings .config/settings.json",
+    "start-dev": "ruby .scripts/localtunnel.rb --port 3000 --subdomain start & meteor --settings .config/settings.json",
     "chimp-watch": "chimp --ddp=http://localhost:3000 --watch --mocha --path=tests",
     "chimp-test": "chimp --ddp=http://localhost:3000 --mocha --path=tests",
     "staging": "meteor deploy staging.meteor.com --settings settings-development.json",
     "production": "meteor deploy production.meteor.com --settings settings-production.json"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "chimp": "^0.41.2",
     "eslint": "^3.8.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-meteor": "^4.0.1",
-    "eslint-plugin-react": "^6.4.1"
+    "eslint-plugin-react": "^6.4.1",
+    "eslint": "^3.8.1"
+  },
+  "babel": {
+    "plugins": [
+      "transform-class-properties"
+    ]
   },
   "eslintConfig": {
     "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
       "ecmaFeatures": {
         "jsx": true
       }
     },
     "plugins": [
       "meteor",
-      "react"
+      "react",
+      "class-property"
     ],
     "extends": [
       "airbnb/base",
@@ -36,13 +47,17 @@
       "plugin:react/recommended"
     ],
     "env": {
-      "browser": true
+      "browser": true,
+      "node": true,
+      "mocha": true,
+      "es6": true
     },
     "globals": {
       "server": false,
       "browser": false,
       "expect": false
     },
+    "parser": "babel-eslint",
     "rules": {
       "import/no-unresolved": 0,
       "import/no-extraneous-dependencies": 0,
@@ -57,6 +72,14 @@
             "_resetPasswordToken",
             "_name"
           ]
+        }
+      ],
+      "max-len": [
+        "error",
+        {
+          "ignoreComments": true,
+          "ignoreTrailingComments": true,
+          "ignoreUrls": true
         }
       ],
       "class-methods-use-this": 0
